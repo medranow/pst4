@@ -5,8 +5,8 @@ from .models import User, Post
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "username")
+    list_display = ("username",)
 
-admin.site.register(User, UserAdmin)
+admin.site.register(User)
 admin.site.register(Post)
 
