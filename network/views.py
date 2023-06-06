@@ -3,8 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.http import JsonResponse
+from datetime import datetime
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
@@ -61,3 +63,19 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+    
+# Allows to post a new post and save it in the database
+def new_post(request):
+   if request.method == "POST":
+       user = request.user
+       text = request.POST["text-compose"]
+       post = Post(
+           user = user,
+           post = text,
+           date = datetime.now()
+       )
+       post.save()
+       #JsonResponse("success")
+       return HttpResponseRedirect(reverse("index"))
+   else:
+       render(request, "network/index.html")
