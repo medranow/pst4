@@ -10,7 +10,14 @@ from .models import User, Post
 
 
 def index(request):
-    return render(request, "network/index.html")
+    user = request.user
+    posts = Post.objects.filter(user=user)
+    return render(request, "network/index.html", {
+        "user": user, 
+        "posts": posts
+    })
+       
+
 
 
 def login_view(request):

@@ -14,6 +14,16 @@
             <input class="btn btn-primary" type="submit" value="Post">
         </div> 
     </form>
+    <div class="mb-3">
+        {% for post in posts %}
+        <div>
+            <div>User: {{ post.user }}</div>
+            <div>{{ post.post }}</div>
+            <div>Number of likes: {{post.likes}}</div>
+            <div>{{ post.date }}</div>
+        </div>
+        {% endfor %}
+    </div>
 {% endif %}
 
    
