@@ -93,14 +93,45 @@ def new_post(request):
 # Renders a profile page
 def profile(request, user_id):
     if request.user.is_authenticated:
-        posts = Post.objects.filter(user=user_id)
+        posts = Post.objects.filter(user=user_id).order_by('-date')
+        follows = Follower.objects.all()
         return render(request, "network/profile.html", {
             'posts': posts,
+            'follows': follows
         })
     else:
-        posts = Post.objects.filter(user=user_id)
+        posts = Post.objects.filter(user=user_id).order_by('-date')
         return render(request, "network/profile.html", {
             'posts': posts,
         })
 
-       
+# Increase followers and followings
+def followerCount(request, user_id, currentUser):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            
+            countPlusFollowers += 1
+            countPlusFollowings += 1
+            
+            # Update current user following
+            new_following = Follower(
+                user = currentUser,
+                numberFollowings = countPlusFollowers,
+                following = user_id
+            )
+            new_following.save()
+            
+            # Update the follower information
+            new_follower = Follower(
+                user = user_id,
+                numberFollowings = countPlusFollowings,
+                followers = currentUser
+            )
+            new_follower.save()
+
+            posts = Post.objects.filter(user=user_id)
+            return render(request, "network/test.html", {
+                'posts': posts
+                })
+        else:
+            return render(request, "network/test.html")
