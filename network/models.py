@@ -16,5 +16,7 @@ class Post(models.Model):
 class Follower(models.Model):
     user = models.ForeignKey(User,blank=True, null=True, on_delete=models.CASCADE, 
     related_name="num_followers")
-    numberFollowers = models.IntegerField(default=0)
-    following = models.ManyToManyField(User, blank=True, null=True, related_name="user_following")
+    numberFollowers = models.IntegerField(default=1)
+    numberFollowings = models.IntegerField(default=0)
+    following = models.ManyToManyField(User, blank=True, null=True, related_name="user_followings")
+    followers = models.ManyToManyField(User, blank=True, null=True, related_name="user_followers")

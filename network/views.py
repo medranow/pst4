@@ -13,7 +13,7 @@ def index(request):
     if request.user.is_authenticated:
         posts = Post.objects.all()
         return render(request, "network/index.html", {
-            "posts": posts
+            "posts": posts,
         })
     else:
         return render(request, "network/index.html")
@@ -93,7 +93,6 @@ def new_post(request):
 def profile(request, user_id):
     if request.user.is_authenticated:
         posts = Post.objects.filter(user=user_id)
-        followers = Follower.objects.all(pk=user_id)
         return render(request, "network/profile.html", {
             'posts': posts,
         })
