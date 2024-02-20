@@ -1,11 +1,20 @@
 {% extends "network/layout.html" %}
 
 {% block body%}
+    {% if user.is_authenticated %}
     <h1>{{user}}</h1>
+    {% else %}
+    <h4>Please log in to have full access.</h4>
+    {% endif %}
     <div>
-       Followers: {{ followStat.numberFollowers }}
-       Following: {{ followStat.numberFollowings }}
-
+        <section>
+            Followers: {{ followStat.numberFollowers }}
+        </section>
+        <section>
+            Following: {{ followStat.numberFollowings }}
+        </section>
+       
+      
         
         <div class="mb-3">
             {% for post in posts %}
@@ -18,8 +27,28 @@
             {% endfor %}
         </div>
 
+        <!-- Here goes the following and follow button-->
         <div>
-          
+        {% if user.is_authenticated %}
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <form action="#" method="post">
+                {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Follow</button>
+                </form>
+              </div>
+              <div class="col-6">
+                <form action="#" method="post">
+                {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Unfollow</button>
+                </form>
+              </div>
+            </div>
+        {% endif %}
+          </div>
+
+           
         </div>
        
        

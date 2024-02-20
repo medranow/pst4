@@ -16,9 +16,10 @@ def index(request):
             "posts": posts,
         })
     else:
-        return render(request, "network/index.html")
-       
-       
+        posts = Post.objects.all()
+        return render(request, "network/index.html", {
+            "posts": posts,
+        })
 
 
 
@@ -97,6 +98,9 @@ def profile(request, user_id):
             'posts': posts,
         })
     else:
-        pass
+        posts = Post.objects.filter(user=user_id)
+        return render(request, "network/profile.html", {
+            'posts': posts,
+        })
 
        
