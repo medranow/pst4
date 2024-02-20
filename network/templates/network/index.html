@@ -2,27 +2,30 @@
 
 {% block body %}
 {% if user.is_authenticated %}
-    <form action="{% url 'new_post' %}" method="post">
-        {% csrf_token %}
-        <div class="mb-3 card col-10">
-            <div class="mb-3">
-                <label for="post" class="form-label">New Post</label>
+    <h1> All Posts</h1>
+    <div>
+        <form action="{% url 'new_post' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3 card col-10">
+                <div class="mb-3">
+                    <label for="post" class="form-label">New Post</label>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" name="text-compose" rows="2"></textarea>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Post">
+            </div> 
+        </form>
+        <div class="mb-3">
+            {% for post in posts %}
+            <div class="card col-10">
+                <div>User: {{ post.user }}</div>
+                <div>{{ post.post }}</div>
+                <div>Number of likes: {{post.likes}}</div>
+                <div>{{ post.date }}</div>
             </div>
-            <div class="mb-3">
-                <textarea class="form-control" name="text-compose" rows="2"></textarea>
-            </div>
-            <input class="btn btn-primary" type="submit" value="Post">
-        </div> 
-    </form>
-    <div class="mb-3">
-        {% for post in posts %}
-        <div class="card col-10">
-            <div>User: {{ post.user }}</div>
-            <div>{{ post.post }}</div>
-            <div>Number of likes: {{post.likes}}</div>
-            <div>{{ post.date }}</div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 {% endif %}
 

@@ -11,10 +11,8 @@ from .models import User, Post
 
 def index(request):
     if request.user.is_authenticated:
-        user = request.user
-        posts = Post.objects.filter(user=user)
+        posts = Post.objects.all()
         return render(request, "network/index.html", {
-            "user": user, 
             "posts": posts
         })
     else:
