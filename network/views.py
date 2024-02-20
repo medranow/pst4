@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from datetime import datetime
 
-from .models import User, Post
+from .models import User, Post, Follower
 
 
 def index(request):
@@ -88,3 +88,16 @@ def new_post(request):
        return HttpResponseRedirect(reverse("index"))
    else:
        render(request, "network/index.html")
+
+# Renders a profile page
+def profile(request, user_id):
+    if request.user.is_authenticated:
+        posts = Post.objects.filter(user=user_id)
+        followers = Follower.objects.all(pk=user_id)
+        return render(request, "network/profile.html", {
+            'posts': posts,
+        })
+    else:
+        pass
+
+       
