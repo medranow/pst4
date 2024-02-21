@@ -6,12 +6,12 @@ from django.urls import reverse
 from django.http import JsonResponse
 from datetime import datetime
 
-from .models import User, Post, Follower
+from .models import User, Post, Follow
 
 
 def index(request):
     if request.user.is_authenticated:
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by("id")
         return render(request, "network/index.html", {
             "posts": posts,
         })
@@ -93,11 +93,30 @@ def new_post(request):
 # Renders a profile page
 def profile(request, user_id):
     if request.user.is_authenticated:
+        user = User.objects.get(pk=user_id)
         posts = Post.objects.filter(user=user_id).order_by('-date')
-        follows = Follower.objects.all()
+
+        # Get the number of follows
+        following = Follow.objects.filter(user=user)
+        followers = Follow.objects.filter(user_follower=user)
+
+        try:
+            checkFollow = followers.filter(user=User.objects.get(pk=request.user.id))
+            if len(checkFollow) != 0:
+                isFollowing = True
+            else:
+                isFollowing = False
+        except:
+            isFollowing =False
+        
         return render(request, "network/profile.html", {
             'posts': posts,
-            'follows': follows
+            'userName': user.username,
+            'following': following,
+            'followers': followers,
+            'isFollowing': isFollowing,
+            'user_profile': user,
+            
         })
     else:
         posts = Post.objects.filter(user=user_id).order_by('-date')
@@ -105,72 +124,33 @@ def profile(request, user_id):
             'posts': posts,
         })
 
-# Increase followers and followings
-def followerCount(request, userFollow):
-    if request.user.is_authenticated:
-        if request.method == "POST":
+# Follow
+def follow(request):
+    userFollower = request.POST['userfollow']
+    currentUser = User.objects.get(pk=request.user.id)
+    userFollowData = User.objects.get(username=userFollower)
+    f = Follow(
+        user = currentUser,
+        user_follower = userFollowData
+    )
+    f.save()
 
-            #Declare variables for sum
-            countPlusFollow = 0
-            if countPlusFollow <= countPlusFollow:
-                countPlusFollow += 1
+    user_id = userFollowData.id 
+    
+    return HttpResponseRedirect(reverse(profile, kwargs={'user_id': user_id}))
 
-            
 
-            # Create user following
-            new_following = Follower (
-                numberFollowings = countPlusFollow,
-                # I use _id because I need an integer as a reference
-                following_id = userFollow,
-                profile = request.user
-            )
-            new_following.save()
-       
-            #Update user being followed
-            new_follower = Follower (
-                numberFollowers = countPlusFollow,
-                followers = request.user,
-                # I use profile_id because I need an integer reference
-                profile_id = userFollow
-            )
-            new_follower.save()
+# Unfollow
+def unfollow(request):
+    userFollower = request.POST["userfollow"]
+    currentUser = User.objects.get(pk=request.user.id)
+    userFollowData = User.objects.get(username=userFollower)
+    f = Follow.objects.get(
+        user = currentUser,
+        user_follower = userFollowData
+    )
+    f.delete()
 
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/test.html")
-
-# Decrease the count of follower and following
-def followDecrease(request, user_id, currentUser):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            
-            getCurrentUser = User.objects.get(pk=currentUser)
-
-            #Declare variables for sum
-            countLessFollow = 0
-
-            if countLessFollow >= countLessFollow:
-                countLessFollow -= 1
-
-            # Update current user following
-            new_following = Follower(
-                user = getCurrentUser,
-                numberFollowings = countLessFollow,
-                following = user_id
-            )
-            new_following.save()
-            
-            # Update the follower information
-            new_follower = Follower(
-                user = user_id,
-                numberFollowings = countLessFollow,
-                followers = currentUser
-            )
-            new_follower.save()
-
-            posts = Post.objects.filter(user=user_id)
-            return render(request, "network/test.html", {
-                'posts': posts
-                })
-        else:
-            return render(request, "network/test.html")
+    user_id = userFollowData.id 
+    
+    return HttpResponseRedirect(reverse(profile, kwargs={'user_id': user_id}))

@@ -8,10 +8,10 @@
     {% endif %}
     <div>
         <section>
-            Followers: {{ followStat.numberFollowers }}
+            Followers: {{ followers.count }}
         </section>
         <section>
-            Following: {{ followStat.numberFollowings }}
+            Following: {{ following.count }}
         </section>
        
       
@@ -25,22 +25,23 @@
                 <div>{{ post.date }}</div>
 
                 <!--Show the following button if the post is not by the current user-->
-                {% if user.id != post.user.id %}
-
-                  
-
+                {% if user != user_profile %}
                     
-                    <form action="{% url 'followDecrease' userFollow=post.user.id %}" method="post" name="unfollow">
+                    {% if isFollowing %}
+                    <form action="{% url 'unfollow' %}" method="post">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-primary">Unfollow</button>
+                      <input type="hidden" name="userfollow" value="{{ user_profile }}">
+                      <input type="submit" class="btn btn-primary" value="unfollow">
                     </form>
-                   
-                    <form action="{% url 'followerCount' userFollow=post.user.id %}" method="post" name="follow">
+                    {% else %}
+                    <form action="{% url 'follow' %}" method="post">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-primary">Follow</button>
+                      <input type="hidden" name="userfollow" value="{{ user_profile }}">
+                      <input type="submit" class="btn btn-primary" value="follow">
                     </form>
-                   
-                  
+                    {% endif %}
+
+                        
                 {% endif %}
             </div>
             {% endfor %}
