@@ -21,3 +21,6 @@ class Follower(models.Model):
     numberFollowings = models.IntegerField(default=0)
     following = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user_followings")
     followers = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user_followers")
+
+    def __str__(self):
+        return str(self.profile)
