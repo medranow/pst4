@@ -15,9 +15,12 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.id}: a post from {self.user}. Text: {self.post} on {self.date.strftime('%d %b %Y %H:%M:%S')}"
     
-class Follower(models.Model):
-    profile = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="profile")
-    numberFollowers = models.IntegerField(default=0)
-    numberFollowings = models.IntegerField(default=0)
-    following = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user_followings")
-    followers = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user_followers")
+class Follow(models.Model):
+    profile = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True, related_name="profile")
+    following = models.ManyToManyField("self", blank=True, null=True, related_name="user_followings")
+    followers = models.ManyToManyField("self", blank=True, null=True, related_name="user_followers")
+    
+    def __str__(self):
+        return str(self.profile)
+    
+

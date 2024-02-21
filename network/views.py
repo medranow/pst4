@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from datetime import datetime
 
-from .models import User, Post, Follower
+from .models import User, Post, Follow, CountFollow
 
 
 def index(request):
