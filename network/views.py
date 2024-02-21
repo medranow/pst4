@@ -106,17 +106,56 @@ def profile(request, user_id):
         })
 
 # Increase followers and followings
-def followerCount(request, user_id, currentUser):
+def followerCount(request, userFollow):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+
+            #Declare variables for sum
+            countPlusFollow = 0
+            if countPlusFollow <= countPlusFollow:
+                countPlusFollow += 1
+
+            
+
+            # Create user following
+            new_following = Follower (
+                numberFollowings = countPlusFollow,
+                # I use _id because I need an integer as a reference
+                following_id = userFollow,
+                profile = request.user
+            )
+            new_following.save()
+       
+            #Update user being followed
+            new_follower = Follower (
+                numberFollowers = countPlusFollow,
+                followers = request.user,
+                # I use profile_id because I need an integer reference
+                profile_id = userFollow
+            )
+            new_follower.save()
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "network/test.html")
+
+# Decrease the count of follower and following
+def followDecrease(request, user_id, currentUser):
     if request.user.is_authenticated:
         if request.method == "POST":
             
-            countPlusFollowers += 1
-            countPlusFollowings += 1
-            
+            getCurrentUser = User.objects.get(pk=currentUser)
+
+            #Declare variables for sum
+            countLessFollow = 0
+
+            if countLessFollow >= countLessFollow:
+                countLessFollow -= 1
+
             # Update current user following
             new_following = Follower(
-                user = currentUser,
-                numberFollowings = countPlusFollowers,
+                user = getCurrentUser,
+                numberFollowings = countLessFollow,
                 following = user_id
             )
             new_following.save()
@@ -124,7 +163,7 @@ def followerCount(request, user_id, currentUser):
             # Update the follower information
             new_follower = Follower(
                 user = user_id,
-                numberFollowings = countPlusFollowings,
+                numberFollowings = countLessFollow,
                 followers = currentUser
             )
             new_follower.save()

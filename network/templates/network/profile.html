@@ -24,28 +24,39 @@
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
 
-                <!--Show the button if the post is not by the current user-->
-                {% if user.id != post.user.id%}
-                <form action="{% url 'followerCount' user_id=post.user.id currentUser=user.id%}" method="post" name="follow">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Follow</button>
-                </form>
+                <!--Show the following button if the post is not by the current user-->
+                {% if user.id != post.user.id %}
+
+                  
+
+                    
+                    <form action="{% url 'followDecrease' userFollow=post.user.id %}" method="post" name="unfollow">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary">Unfollow</button>
+                    </form>
+                   
+                    <form action="{% url 'followerCount' userFollow=post.user.id %}" method="post" name="follow">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
+                   
+                  
                 {% endif %}
             </div>
             {% endfor %}
         </div>
 
         <!--Render posts without button-->
-        {% else %}
-        <div class="mb-3">
-          {% for post in posts %}
-          <div class="card col-10">
-              <div>User: {{ post.user }}</div>
-              <div>{{ post.post }}</div>
-              <div>Number of likes: {{post.likes}}</div>
-              <div>{{ post.date }}</div>
-          </div>
-          {% endfor %}
-        {% endif %}
-    </div>
+      {% else %}
+      <div class="mb-3">
+        {% for post in posts %}
+        <div class="card col-10">
+            <div>User: {{ post.user }}</div>
+            <div>{{ post.post }}</div>
+            <div>Number of likes: {{post.likes}}</div>
+            <div>{{ post.date }}</div>
+        </div>
+        {% endfor %}
+      {% endif %}
+  </div>
 {% endblock %}

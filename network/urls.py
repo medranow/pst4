@@ -10,5 +10,6 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("profile/<int:user_id>", views.profile, name="profile"),
-    path("followerCount/<int:user_id>/<int:currentUser>", views.followerCount, name="followerCount"),
+    path("followerCount/<int:userFollow>", views.followerCount, name="followerCount"),
+    path("followDecrease/<int:userFollow>", views.followerCount, name="followDecrease"),
 ]
