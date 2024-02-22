@@ -11,7 +11,7 @@ from .models import User, Post, Follow
 
 def index(request):
     if request.user.is_authenticated:
-        posts = Post.objects.all().order_by("id")
+        posts = Post.objects.all().order_by("-date")
         return render(request, "network/index.html", {
             "posts": posts,
         })
@@ -158,7 +158,7 @@ def unfollow(request):
 def following(request):
     if request.user.is_authenticated:
         followUsers = Follow.objects.filter(user=request.user.id)
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-date')
 
         return render(request, "network/following.html", {
             "followUsers": followUsers,

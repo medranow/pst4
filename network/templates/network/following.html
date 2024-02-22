@@ -6,7 +6,9 @@
 <div class="mb-3">
     {% for user in followUsers %}
 
-    <div>User followed {{user.user_follower}}</div>
+    <div>
+        User followed: {{user.user_follower|capfirst}}
+    </div>
 
         {% for post in posts %}
 
