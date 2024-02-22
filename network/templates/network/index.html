@@ -17,7 +17,7 @@
             </div> 
         </form>
         <div class="mb-3">
-            {% for post in posts %}
+            {% for post in page_obj %}
             <div class="card col-10">
                 <div><a id="users" class="" href="{% url 'profile' user_id=post.user.id %}"> User: {{ post.user }}</a></div>
                 <div>{{ post.post }}</div>
@@ -27,6 +27,23 @@
             {% endfor %}
         </div>
     </div>
+
+    <!-- I am trying to work on pagination -->
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+                
+            </ul>
+          </nav>
+    </div>
+    
+
 {% else %}
 <div class="mb-3">
     {% for post in posts %}

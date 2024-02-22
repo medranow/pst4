@@ -5,15 +5,30 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
 from datetime import datetime
+from django.core.paginator import Paginator
+from django.views.generic import ListView
+
 
 from .models import User, Post, Follow
+
+# Added a class of ListView to view my post model items
+class PostsListView(ListView):
+    paginate_by = 2
+    model = Post
 
 
 def index(request):
     if request.user.is_authenticated:
+        # Obtain all posts
         posts = Post.objects.all().order_by("-date")
+
+        #Paginate
+        paginator = Paginator(posts, 2) #show 2 posts per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request, "network/index.html", {
-            "posts": posts,
+            "page_obj": page_obj,
         })
     else:
         posts = Post.objects.all()
@@ -168,3 +183,4 @@ def following(request):
 
     else:
         return render(request, "network/index.html")
+    
