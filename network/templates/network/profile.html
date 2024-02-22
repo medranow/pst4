@@ -16,6 +16,26 @@
        
       
         {% if user.is_authenticated %}
+        
+         <!--Show the following button if the post is not by the current user-->
+         {% if user != user_profile %}
+                    
+         {% if isFollowing %}
+         <form action="{% url 'unfollow' %}" method="post">
+           {% csrf_token %}
+           <input type="hidden" name="userfollow" value="{{ user_profile }}">
+           <input type="submit" class="btn btn-primary" value="unfollow">
+         </form>
+         {% else %}
+         <form action="{% url 'follow' %}" method="post">
+           {% csrf_token %}
+           <input type="hidden" name="userfollow" value="{{ user_profile }}">
+           <input type="submit" class="btn btn-primary" value="follow">
+         </form>
+         {% endif %}
+
+             
+     {% endif %} 
         <div class="mb-3">
             {% for post in posts %}
             <div class="card col-10">
@@ -23,26 +43,6 @@
                 <div>{{ post.post }}</div>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
-
-                <!--Show the following button if the post is not by the current user-->
-                {% if user != user_profile %}
-                    
-                    {% if isFollowing %}
-                    <form action="{% url 'unfollow' %}" method="post">
-                      {% csrf_token %}
-                      <input type="hidden" name="userfollow" value="{{ user_profile }}">
-                      <input type="submit" class="btn btn-primary" value="unfollow">
-                    </form>
-                    {% else %}
-                    <form action="{% url 'follow' %}" method="post">
-                      {% csrf_token %}
-                      <input type="hidden" name="userfollow" value="{{ user_profile }}">
-                      <input type="submit" class="btn btn-primary" value="follow">
-                    </form>
-                    {% endif %}
-
-                        
-                {% endif %}
             </div>
             {% endfor %}
         </div>
