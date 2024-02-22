@@ -20,7 +20,7 @@
             {% for post in page_obj %}
             <div class="card col-10">
                 <div><a id="users" class="" href="{% url 'profile' user_id=post.user.id %}"> User: {{ post.user }}</a></div>
-                <div>{{ post.post }}</div>
+                <div id="contentIndexPost">{{ post.post }}</div>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
             </div>

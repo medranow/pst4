@@ -1,4 +1,6 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
 
 {% block body%}
     {% if user.is_authenticated %}
@@ -20,31 +22,54 @@
          <!--Show the following button if the post is not by the current user-->
          {% if user != user_profile %}
                     
-         {% if isFollowing %}
-         <form action="{% url 'unfollow' %}" method="post">
-           {% csrf_token %}
-           <input type="hidden" name="userfollow" value="{{ user_profile }}">
-           <input type="submit" class="btn btn-primary" value="unfollow">
-         </form>
-         {% else %}
-         <form action="{% url 'follow' %}" method="post">
-           {% csrf_token %}
-           <input type="hidden" name="userfollow" value="{{ user_profile }}">
-           <input type="submit" class="btn btn-primary" value="follow">
-         </form>
-         {% endif %}
-     {% endif %}
+          {% if isFollowing %}
+          <form action="{% url 'unfollow' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="userfollow" value="{{ user_profile }}">
+            <input type="submit" class="btn btn-primary" value="unfollow">
+          </form>
+          {% else %}
+          <form action="{% url 'follow' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="userfollow" value="{{ user_profile }}">
+            <input type="submit" class="btn btn-primary" value="follow">
+          </form>
+          {% endif %}
 
-     
-        <div class="mb-3">
-            {% for post in page_obj %}
+          {% for post in page_obj %}
             <div class="card col-10">
+                <div>User: {{ post.user }}</div>
+                <div id="textPost">{{ post.post }}</div>
+                <div>Number of likes: {{post.likes}}</div>
+                <div>{{ post.date }}</div>
+            </div>
+          {% endfor %}
+
+        {% else %}
+       
+        {% for post in page_obj %}
+            <div class="card col-10 post_view">
                 <div>User: {{ post.user }}</div>
                 <div>{{ post.post }}</div>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
+                <button class="buttonProfile">Edit</button>
             </div>
-            {% endfor %}
+            
+            <!--Edit view-->
+            <div class="card col-10 edit_view">
+              <div>User: {{ post.user }}</div>
+              <textarea id="textPost">{{ post.post }}</textarea>
+              <button id="buttonSaveEdit">Save</button>
+          </div>
+        {% endfor %}
+            
+
+        {% endif %}
+
+     
+        <div class="mb-3">
+            
 
             <!-- Buttons for navigation in pagination -->
             <div>
@@ -62,15 +87,17 @@
           </div>
         </div>
 
-        <!--Render posts without button-->
+        <!--Render posts without button to follow because user is not logged in-->
       {% else %}
       <div class="mb-3">
         {% for post in page_obj %}
         <div class="card col-10">
             <div>User: {{ post.user }}</div>
-            <div>{{ post.post }}</div>
+            <div id="contentProfilePost">{{ post.post }}</div>
             <div>Number of likes: {{post.likes}}</div>
             <div>{{ post.date }}</div>
+            <button id="buttonProfile" type="button" class="btn btn-primary" name="edit" value="edit">Edit</button>
+
         </div>
         {% endfor %}
 
