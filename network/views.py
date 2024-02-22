@@ -154,3 +154,17 @@ def unfollow(request):
     user_id = userFollowData.id 
     
     return HttpResponseRedirect(reverse(profile, kwargs={'user_id': user_id}))
+
+def following(request):
+    if request.user.is_authenticated:
+        followUsers = Follow.objects.filter(user=request.user.id)
+        posts = Post.objects.all()
+
+        return render(request, "network/following.html", {
+            "followUsers": followUsers,
+            "posts": posts
+        })
+
+
+    else:
+        return render(request, "network/index.html")

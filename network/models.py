@@ -22,3 +22,7 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.user} is following {self.user_follower}"
+
+class PostFollowers(models.Model):
+    user = models.ManyToManyField(User, related_name ="followedUser")
+    posts = models.ManyToManyField(Post, related_name="postsOfUserFollowed")

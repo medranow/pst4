@@ -1,0 +1,32 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+<div class="mb-3">
+    {% for user in followUsers %}
+
+    <div>User followed {{user.user_follower}}</div>
+
+        {% for post in posts %}
+
+            {% if user.user_follower == post.user %}
+            <div class="card col-10">
+                <div><a id="users" class="" href="{% url 'profile' user_id=post.user.id %}"> User: {{ post.user }}</a></div>
+                <div>{{ post.post }}</div>
+                <div>Number of likes: {{post.likes}}</div>
+                <div>{{ post.date }}</div>
+            </div>
+            {% endif %}
+           
+            
+
+        {% endfor %}
+        
+    {% endfor %}
+   
+</div>
+{% endif %}
+
+
+{% endblock %}
