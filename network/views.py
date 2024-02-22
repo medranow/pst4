@@ -123,9 +123,14 @@ def profile(request, user_id):
                 isFollowing = False
         except:
             isFollowing =False
+
+        # Pagination for profiles
+        paginator = Paginator(posts, 2) #show 2 posts per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         
         return render(request, "network/profile.html", {
-            'posts': posts,
+            'page_obj': page_obj,
             'userName': user.username,
             'following': following,
             'followers': followers,
@@ -175,12 +180,25 @@ def following(request):
         followUsers = Follow.objects.filter(user=request.user.id)
         posts = Post.objects.all().order_by('-date')
 
+        # Obtain all posts of people followed
+        postPrint = []
+        for user in followUsers:
+            for post in posts:
+                if user.user_follower == post.user:
+                    postPrint.append(post)
+                    
+
+        # Pagination
+        paginator = Paginator(postPrint, 2) #show 2 posts per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request, "network/following.html", {
             "followUsers": followUsers,
-            "posts": posts
+            "posts": posts,
+            "page_obj": page_obj,
+
         })
-
-
     else:
         return render(request, "network/index.html")
     
