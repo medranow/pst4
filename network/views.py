@@ -31,10 +31,7 @@ def index(request):
             "page_obj": page_obj,
         })
     else:
-        posts = Post.objects.all()
-        return render(request, "network/index.html", {
-            "posts": posts,
-        })
+        return render(request, "network/index.html")
 
 
 
