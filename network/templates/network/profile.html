@@ -37,6 +37,13 @@
           console.log(result)
       ) 
 
+       //Toggle on and off between the textarea and the div that holds the text
+      document.querySelector(`#textEdit_${id}`).style.display= 'none';
+      document.querySelector(`#textPost_${id}`).style.display= 'block';
+
+      //Populate the div tag with the the new info
+      document.querySelector(`#textPost_${id}`).innerHTML= `${newText}`;
+
     }
   </script>
 {% endblock %}
