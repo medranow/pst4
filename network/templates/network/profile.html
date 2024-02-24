@@ -1,6 +1,27 @@
 {% extends "network/layout.html" %}
 {% load static %}
 
+{% block script %}
+  <script>
+    function edit(id) {
+      console.log(id)
+      const textPost = document.querySelector(`#textPost_${id}`).textContent;
+      console.log(textPost)
+      
+      fetch(`/edit/${id}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          textPost: textPost
+        })
+      })
+      .then(response => response.json())
+      .then(result => 
+          console.log(result)
+      ) 
+    }
+  </script>
+{% endblock %}
+
 
 {% block body%}
     {% if user.is_authenticated %}
@@ -39,7 +60,7 @@
           {% for post in page_obj %}
             <div class="card col-10">
                 <div>User: {{ post.user }}</div>
-                <div id="textPost">{{ post.post }}</div>
+                <div id="">{{ post.post }}</div>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
             </div>
@@ -50,18 +71,13 @@
         {% for post in page_obj %}
             <div class="card col-10 post_view">
                 <div>User: {{ post.user }}</div>
-                <div>{{ post.post }}</div>
+                <div id="textPost_{{ post.id }}">{{ post.post }}</div>
+                <textarea id="textEdit_{{ post.id }}" style="display:none"></textarea>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
-                <button class="buttonProfile">Edit</button>
+                <button onclick="edit({{ post.id }})">Edit</button>
+                <button id="buttonSaveEdit_{{ post.id }}">Save</button>
             </div>
-            
-            <!--Edit view-->
-            <div class="card col-10 edit_view">
-              <div>User: {{ post.user }}</div>
-              <textarea id="textPost">{{ post.post }}</textarea>
-              <button id="buttonSaveEdit">Save</button>
-          </div>
         {% endfor %}
             
 
@@ -96,8 +112,6 @@
             <div id="contentProfilePost">{{ post.post }}</div>
             <div>Number of likes: {{post.likes}}</div>
             <div>{{ post.date }}</div>
-            <button id="buttonProfile" type="button" class="btn btn-primary" name="edit" value="edit">Edit</button>
-
         </div>
         {% endfor %}
 

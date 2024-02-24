@@ -7,7 +7,9 @@ from django.http import JsonResponse
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.views.generic import ListView
-
+from django.http import JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post, Follow
 
@@ -198,4 +200,21 @@ def following(request):
         })
     else:
         return render(request, "network/index.html")
-    
+ 
+@csrf_exempt   
+def edit(request, id):
+    if request.method == "POST":
+        # Obtain the posts by the user
+        data = json.loads(request.body)
+        postToEdit = Post.objects.get(pk=id)
+        postToEdit.post = data["textPost"]
+        postToEdit.save()
+        return JsonResponse({"message": "Change succesful", "data": data["textPost"]})
+
+
+    # Missing what request method I would use
+    ##########
+
+  
+
+
