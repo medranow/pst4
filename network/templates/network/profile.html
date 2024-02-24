@@ -5,8 +5,18 @@
   <script>
     function edit(id) {
       console.log(id)
+      // Obtain the text of the post
       const textPost = document.querySelector(`#textPost_${id}`).textContent;
       console.log(textPost)
+
+      //Toggle on and off between the textarea and the div that holds the text
+      document.querySelector(`#textEdit_${id}`).style.display= 'block';
+      document.querySelector(`#textPost_${id}`).style.display= 'none';
+
+      //Populate the textarea tag with the post text
+      document.querySelector(`#textEdit_${id}`).innerHTML= `${textPost}`;
+
+      
       
       fetch(`/edit/${id}`, {
         method: 'POST',
