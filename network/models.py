@@ -11,11 +11,19 @@ class User(AbstractUser):
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="poster")
     post = models.CharField(max_length=64)
-    date = models.DateField()
-    like = models.BooleanField(default=False)
+    date = models.DateTimeField()
+    likes = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.id}: a post from {self.user}. Text: {self.post} on {self.date.strftime('%d %b %Y %H:%M:%S')}"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user,
+            "date": self.date.strftime("%b %d %Y, %I:%M %p"),
+            "likes": self.likes
+        }    
  
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userWhoIsFollowing")

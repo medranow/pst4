@@ -1,5 +1,35 @@
 {% extends "network/layout.html" %}
 
+{% block script %}
+<script>
+    function likePost(id){
+        console.log(id)
+
+        // Establish variable to count
+        let likeNumber;
+
+         //Save the new text
+      fetch(`/like/${id}`)
+        .then(response => response.json())
+        .then(likeCount => {
+            console.log(likeCount)
+
+            likeCount = JSON.stringify(likeCount);
+
+            console.log(`This is the variable likeNumber set to ${likeCount}`)
+        }
+            
+
+           
+
+        )
+    }
+       
+
+    
+</script>
+{% endblock %}
+
 {% block body %}
 {% if user.is_authenticated %}
     <h1> All Posts</h1>
@@ -21,8 +51,18 @@
             <div class="card col-10">
                 <div><a id="users" class="" href="{% url 'profile' user_id=post.user.id %}"> User: {{ post.user }}</a></div>
                 <div id="contentIndexPost">{{ post.post }}</div>
-                <div>Number of likes: {{post.likes}}</div>
+                <div id="countLike_${{post.id}}" class="color">Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
+
+                <!--Like button-->
+                <div class="likeButton">
+                    <button class="button button-like" onclick="likePost({{post.id}})">
+                        <i class="fa fa-heart"></i>
+                        <span>Like</span>
+                    </button>
+                </div>
+                
+                
             </div>
             {% endfor %}
         </div>
