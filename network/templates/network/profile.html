@@ -101,8 +101,8 @@
                 <textarea id="textEdit_{{ post.id }}" style="display:none"></textarea>
                 <div>Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
-                <button onclick="edit({{ post.id }})">Edit</button>
-                <button onclick="save({{post.id}})">Save</button>
+                <div><button type="button" class="btn btn-primary" onclick="edit({{ post.id }})">Edit</button></div>
+                <div><button type="button" class="btn btn-success" onclick="save({{post.id}})">Save</button></div>
             </div>
         {% endfor %}
             

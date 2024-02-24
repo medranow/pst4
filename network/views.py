@@ -212,9 +212,3 @@ def edit(request, id):
         return JsonResponse({"message": "Change succesful", "data": data["textPost"]})
 
 
-    # Missing what request method I would use
-    ##########
-
-  
-
-
