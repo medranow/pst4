@@ -5,18 +5,37 @@
     function likePost(id){
         console.log(id)
 
-        // Establish variable to count
-        let likeNumber;
+        
 
          //Save the new text
-      fetch(`/like/${id}`)
+      fetch(`/like/${id}`, {
+        method: 'GET',
+      })
         .then(response => response.json())
-        .then(likeCount => {
-            console.log(likeCount)
+        .then( (data) => {
+            console.log(data["data"])
+        
+            let likeNumber;
 
-            likeCount = JSON.stringify(likeCount);
+            likeNumber = data["data"]
+            console.log(`This is the variable likeNumber set to ${likeNumber}`)
 
-            console.log(`This is the variable likeNumber set to ${likeCount}`)
+            //We need to add 1 like per click
+            likeNumber += 1;
+            console.log(`New likeNumber plus one ${likeNumber}`)
+
+            // We need to fetch to update number in database
+            fetch(`/like/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    newNumberLikes: likeNumber
+                })
+            })
+            .then(response => response.json())
+            .then(result =>
+                console.log(result)
+            )
+            
         }
             
 

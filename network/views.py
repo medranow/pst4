@@ -213,9 +213,15 @@ def edit(request, id):
 
 @csrf_exempt
 def like(request, id):
-    addLike = Post.objects.get(pk=id)
-    likes =addLike.likes
-    return JsonResponse({"data": likes})
-
-
+    if request.method == "GET":
+        currentLikes = Post.objects.get(pk=id)
+        likes = currentLikes.likes
+        return JsonResponse({"data": likes})
+    
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        newLikes = Post.objects.get(pk=id)
+        newLikes.likes = data["newNumberLikes"]
+        newLikes.save()
+        return JsonResponse({"message": "Change succesful", "data": data["newNumberLikes"]})
 
