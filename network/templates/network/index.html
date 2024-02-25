@@ -32,9 +32,17 @@
                 })
             })
             .then(response => response.json())
-            .then(result =>
-                console.log(result)
+            .then(data => {
+                console.log(data["data"])
+
+                //Update client side the number of likes 
+                var updateTag = document.querySelector(`#countLike_${id}`);
+                console.log(updateTag)
+                updateTag.innerHTML = `Number of likes: ${data["data"]}`;
+            }   
             )
+
+           
             
         }
             
@@ -70,7 +78,7 @@
             <div class="card col-10">
                 <div><a id="users" class="" href="{% url 'profile' user_id=post.user.id %}"> User: {{ post.user }}</a></div>
                 <div id="contentIndexPost">{{ post.post }}</div>
-                <div id="countLike_${{post.id}}" class="color">Number of likes: {{post.likes}}</div>
+                <div id="countLike_{{post.id}}" class="color">Number of likes: {{post.likes}}</div>
                 <div>{{ post.date }}</div>
 
                 <!--Like button-->
