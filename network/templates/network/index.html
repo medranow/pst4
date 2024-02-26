@@ -7,7 +7,21 @@
     var unlikeHasBeenCalled = false;
 
     function likePost(id){
-         //Save the new text
+        
+        // Check whether the post has been liked by fetchign 
+        fetch(`/liked/${id}`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then( data => {
+
+                var hasBeenLiked = data["data"]
+
+                
+
+                if (!hasBeenLiked) {
+
+                    //Save the new text
         fetch(`/like/${id}`, {
             method: 'GET',
         })
@@ -28,7 +42,8 @@
                 fetch(`/like/${id}`, {
                     method: 'PUT',
                     body: JSON.stringify({
-                        newNumberLikes: likeNumber
+                        newNumberLikes: likeNumber,
+                        liked: hasBeenLiked
                     })
                 })
                 .then(response => response.json())
@@ -52,6 +67,20 @@
 
             )
 
+                } else {
+                    console.log(`This post has been liked? ${hasBeenLiked}`)
+                     // Toggle the like button
+                    document.querySelector(`#likeButton_${id}`).style.display= 'none';
+                    document.querySelector(`#unlikeButton_${id}`).style.display='block';
+                }
+
+
+            })
+
+
+
+         
+
            
         }
         
@@ -59,9 +88,17 @@
 function unlikePost(id){
         console.log(id)
 
-        
+        fetch(`/liked/${id}`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then( data => {
 
-         //Save the new text
+                hasBeenLiked = data["data"] // Whether true or false
+
+                if (!hasBeenLiked) {
+
+                    //Save the new text
       fetch(`/like/${id}`, {
         method: 'GET',
       })
@@ -82,7 +119,8 @@ function unlikePost(id){
             fetch(`/like/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
-                    newNumberLikes: likeNumber
+                    newNumberLikes: likeNumber,
+                    liked: hasBeenLiked
                 })
             })
             .then(response => response.json())
@@ -102,6 +140,16 @@ function unlikePost(id){
         }  
 
         )
+                } else {
+                    // Toggle the like button
+                document.querySelector(`#likeButton_${id}`).style.display= 'block';
+                document.querySelector(`#unlikeButton_${id}`).style.display='none';
+                }
+
+            })
+        
+
+         
     }
 
     

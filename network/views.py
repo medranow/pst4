@@ -222,7 +222,9 @@ def like(request, id):
         data = json.loads(request.body)
         newLikes = Post.objects.get(pk=id)
         newLikes.likes = data["newNumberLikes"]
+        newLikes.liked = data["liked"]
         newLikes.save()
+
         return JsonResponse({"message": "Change succesful", "data": data["newNumberLikes"]})
 
 @csrf_exempt
@@ -230,8 +232,7 @@ def liked(request, id):
     if request.method == "GET":
         isItLiked = Post.objects.get(pk=id)
         liked = isItLiked.liked
-        unliked = isItLiked.unliked
-        return JsonResponse({"message": "liked and unliked boolean obtained", })
+        return JsonResponse({"data": liked})
 
 
 

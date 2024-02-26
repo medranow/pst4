@@ -17,15 +17,17 @@ class Post(models.Model):
     unliked = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.id}: a post from {self.user}. Text: {self.post} on {self.date.strftime('%d %b %Y %H:%M:%S')}"
+        return f"{self.id}: a post from {self.user}. Text: {self.post} on {self.date.strftime('%d %b %Y %H:%M:%S')} where the post is {self.liked} or {self.unliked}"
     
     def serialize(self):
         return {
             "id": self.id,
             "user": self.user,
             "date": self.date.strftime("%b %d %Y, %I:%M %p"),
-            "likes": self.likes
-        }    
+            "likes": self.likes,
+            "liked": self.liked,
+            "unliked": self.unliked,
+        }
  
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userWhoIsFollowing")
