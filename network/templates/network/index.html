@@ -2,50 +2,59 @@
 
 {% block script %}
 <script>
+    // One click per function
+    var likeHasBeenCalled = false;
+    var unlikeHasBeenCalled = false;
+
     function likePost(id){
-        console.log(id)
-
-        
-
          //Save the new text
-      fetch(`/like/${id}`, {
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then( (data) => {
-            console.log(data["data"])
-        
-            let likeNumber;
-
-            likeNumber = data["data"]
-            console.log(`This is the variable likeNumber set to ${likeNumber}`)
-
-            //We need to add 1 like per click
-            likeNumber += 1;
-            console.log(`New likeNumber plus one ${likeNumber}`)
-
-            // We need to fetch to update number in database
-            fetch(`/like/${id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    newNumberLikes: likeNumber
-                })
-            })
+        fetch(`/like/${id}`, {
+            method: 'GET',
+        })
             .then(response => response.json())
-            .then(data => {
+            .then( (data) => {
                 console.log(data["data"])
+            
+                let likeNumber;
 
-                //Update client side the number of likes 
-                var updateTag = document.querySelector(`#countLike_${id}`);
-                console.log(updateTag)
-                updateTag.innerHTML = `Number of likes: ${data["data"]}`;
-            }   
+                likeNumber = data["data"]
+                console.log(`This is the variable likeNumber set to ${likeNumber}`)
+
+                //We need to add 1 like per click
+                likeNumber += 1;
+                console.log(`New likeNumber plus one ${likeNumber}`)
+
+                // We need to fetch to update number in database
+                fetch(`/like/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        newNumberLikes: likeNumber
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data["data"])
+
+                    //Update client side the number of likes 
+                    var updateTag = document.querySelector(`#countLike_${id}`);
+                    console.log(updateTag)
+                    updateTag.innerHTML = `Number of likes: ${data["data"]}`;
+
+                     // Toggle the unlike buton
+                    document.querySelector(`#likeButton_${id}`).style.display= 'none';
+                    document.querySelector(`#unlikeButton_${id}`).style.display='block';
+
+                    
+
+                }   
+                )
+            }  
+
             )
-        }  
 
-        )
-    }
- 
+           
+        }
+        
 //Unlike function
 function unlikePost(id){
         console.log(id)
@@ -84,6 +93,10 @@ function unlikePost(id){
                 var updateTag = document.querySelector(`#countLike_${id}`);
                 console.log(updateTag)
                 updateTag.innerHTML = `Number of likes: ${data["data"]}`;
+
+                // Toggle the like button
+                document.querySelector(`#likeButton_${id}`).style.display= 'block';
+                document.querySelector(`#unlikeButton_${id}`).style.display='none';
             }   
             )
         }  
@@ -120,14 +133,14 @@ function unlikePost(id){
                 <div>{{ post.date }}</div>
 
                 <!--Like button-->
-                <div id="likeButton">
+                <div id="likeButton_{{post.id}}">
                     <button class="button button-like" onclick="likePost({{post.id}})">
                         <i class="fa fa-heart"></i>
                         <span>Like</span>
                     </button>
                 </div>
                 <!--Unlike button-->
-                <div class="unlikeButton" style="display: block">
+                <div id="unlikeButton_{{post.id}}" style="display: none">
                     <button class="button button-like" onclick="unlikePost({{post.id}})">
                         <i class="fa fa-heart"></i>
                         <span>Unlike</span>

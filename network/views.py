@@ -225,3 +225,13 @@ def like(request, id):
         newLikes.save()
         return JsonResponse({"message": "Change succesful", "data": data["newNumberLikes"]})
 
+@csrf_exempt
+def liked(request, id):
+    if request.method == "GET":
+        isItLiked = Post.objects.get(pk=id)
+        liked = isItLiked.liked
+        unliked = isItLiked.unliked
+        return JsonResponse({"message": "liked and unliked boolean obtained", })
+
+
+
