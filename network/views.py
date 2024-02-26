@@ -15,7 +15,7 @@ from .models import User, Post, Follow
 
 # Added a class of ListView to view my post model items
 class PostsListView(ListView):
-    paginate_by = 2
+    paginate_by = 10
     model = Post
 
 
@@ -25,7 +25,7 @@ def index(request):
         posts = Post.objects.all().order_by("-date")
 
         #Paginate
-        paginator = Paginator(posts, 2) #show 2 posts per page
+        paginator = Paginator(posts, 10) #show 2 posts per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -124,7 +124,7 @@ def profile(request, user_id):
             isFollowing =False
 
         # Pagination for profiles
-        paginator = Paginator(posts, 2) #show 2 posts per page
+        paginator = Paginator(posts, 10) #show 2 posts per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         
@@ -188,7 +188,7 @@ def following(request):
                     
 
         # Pagination
-        paginator = Paginator(postPrint, 2) #show 2 posts per page
+        paginator = Paginator(postPrint, 10) #show 2 posts per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
