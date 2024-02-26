@@ -14,7 +14,6 @@ class Post(models.Model):
     date = models.DateTimeField()
     likes = models.IntegerField(default=0)
     liked = models.BooleanField(default=False)
-    unliked = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id}: a post from {self.user}. Text: {self.post} on {self.date.strftime('%d %b %Y %H:%M:%S')} where the post is {self.liked} or {self.unliked}"
@@ -36,6 +35,3 @@ class Follow(models.Model):
     def __str__(self):
         return f"{self.user} is following {self.user_follower}"
 
-class PostFollowers(models.Model):
-    user = models.ManyToManyField(User, related_name ="followedUser")
-    posts = models.ManyToManyField(Post, related_name="postsOfUserFollowed")

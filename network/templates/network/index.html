@@ -15,11 +15,15 @@
             .then(response => response.json())
             .then( data => {
 
-                var hasBeenLiked = data["data"]
+                let hasBeenLiked = data["data"]
+
+                console.log(`has it been liked? ${hasBeenLiked}`)
 
                 
 
                 if (!hasBeenLiked) {
+
+                    hasBeenLiked = true;
 
                     //Save the new text
         fetch(`/like/${id}`, {
@@ -69,9 +73,9 @@
 
                 } else {
                     console.log(`This post has been liked? ${hasBeenLiked}`)
-                     // Toggle the like button
                     document.querySelector(`#likeButton_${id}`).style.display= 'none';
                     document.querySelector(`#unlikeButton_${id}`).style.display='block';
+                    
                 }
 
 
@@ -94,9 +98,13 @@ function unlikePost(id){
             .then(response => response.json())
             .then( data => {
 
-                hasBeenLiked = data["data"] // Whether true or false
+                let hasBeenLiked = data["data"]
 
-                if (!hasBeenLiked) {
+                console.log(`has it been liked? ${hasBeenLiked}`)
+
+                if (hasBeenLiked) {
+
+                    hasBeenLiked = false;
 
                     //Save the new text
       fetch(`/like/${id}`, {
